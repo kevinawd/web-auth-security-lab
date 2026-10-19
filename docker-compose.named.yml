@@ -1,0 +1,13 @@
+# Uso OPCIONAL (avanzado): túnel con dominio propio + Cloudflare Access.
+# Requiere haber ejecutado antes en Kali:
+#   cloudflared tunnel login
+#   cloudflared tunnel create fakelogin-lab
+# y tener ./cloudflared/config.yml + credentials.json
+#
+# Arrancar con:
+#   docker compose -f docker-compose.yml -f docker-compose.named.yml up -d --build
+services:
+  tunnel:
+    command: tunnel --no-autoupdate --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./cloudflared:/etc/cloudflared:ro

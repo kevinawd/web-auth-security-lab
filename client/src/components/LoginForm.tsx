@@ -1,13 +1,18 @@
 import { useState, type FormEvent } from 'react';
 import { login } from '../lib/api';
 import type { LoginResponse } from '../types';
+import ServiceFooter from './ServiceFooter';
 
 const DEMO_CREDENTIALS = { identifier: 'ana@demo.local', password: 'Demo1234' };
+
+const INPUT_CLASS =
+  'h-9 w-full rounded-[3px] border border-slate-300 bg-white px-2 text-sm text-slate-900 ' +
+  'focus:border-white focus:outline-none focus:ring-2 focus:ring-white/60';
 
 export default function LoginForm() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<LoginResponse | null>(null);
   const [networkError, setNetworkError] = useState<string | null>(null);
@@ -36,11 +41,11 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="rounded-2xl bg-white shadow-xl ring-1 ring-slate-200 p-6 sm:p-8">
-      <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+    <div className="w-full max-w-[430px] min-h-[500px] bg-brand px-8 pb-10 pt-16 text-white shadow-2xl">
+      <form onSubmit={handleSubmit} className="" noValidate>
         <div>
-          <label htmlFor="identifier" className="block text-sm font-medium text-slate-700">
-            Correo o usuario
+          <label htmlFor="identifier" className="mb-1 block text-[18px] font-semibold mt-4">
+            Correo electrónico
           </label>
           <input
             id="identifier"
@@ -50,57 +55,63 @@ export default function LoginForm() {
             required
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            placeholder="ana@demo.local"
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className={INPUT_CLASS}
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-slate-700">
-            Contraseña ficticia
+          <label htmlFor="password" className="mb-1 block text-[18px] font-semibold mt-4">
+            Contraseña
           </label>
-          <div className="mt-1 flex rounded-lg border border-slate-300 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-200">
-            <input
-              id="password"
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              autoComplete="current-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full rounded-l-lg px-3 py-2 text-slate-900 placeholder:text-slate-400 focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((v) => !v)}
-              className="rounded-r-lg px-3 text-xs font-medium text-slate-500 hover:text-slate-800"
-              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-            >
-              {showPassword ? 'Ocultar' : 'Mostrar'}
-            </button>
-          </div>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={INPUT_CLASS}
+          />
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {loading ? 'Enviando…' : 'Ingresar'}
-        </button>
+        <div className="flex items-center justify-between pt-5">
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+              className="h-4 w-4 rounded-none border border-white bg-white accent-white"
+            />
+            Permanezca conectado
+          </label>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="rounded-[3px] border border-white px-8 py-1.5 text-sm font-medium transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? 'Enviando…' : 'Iniciar sesión'}
+          </button>
+        </div>
+
+        <div className="text-[18px]">
+          <a href="#" className="underline underline-offset-2 hover:text-white/80">
+            ¿Olvidó la contraseña?
+          </a>
+          <br />
+          {/* <button
+            type="button"
+            onClick={fillDemoCredentials}
+            className="underline underline-offset-2 hover:text-white/80"
+          >
+            Usar credenciales de demostración
+          </button> */}
+        </div>
       </form>
 
-      <button
-        type="button"
-        onClick={fillDemoCredentials}
-        className="mt-4 w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600 hover:bg-slate-100"
-      >
-        Usar credenciales de demostración
-      </button>
-
       {networkError && (
-        <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+        <p className="mt-4 rounded-[3px] bg-black/25 px-3 py-2 text-sm" role="alert">
           {networkError}
         </p>
       )}
@@ -108,16 +119,13 @@ export default function LoginForm() {
       {result && (
         <div
           role="status"
-          className={`mt-4 rounded-lg px-3 py-2 text-sm ${
-            result.ok
-              ? 'bg-emerald-50 text-emerald-800'
-              : 'bg-red-50 text-red-700'
-          }`}
+          className="mt-4 rounded-[3px] bg-black/25 px-3 py-2 text-sm"
         >
-          <p className="font-medium">{result.message}</p>
+          <p className="font-semibold">{result.message}</p>
           {result.ok && result.user && (
-            <p className="mt-1 text-emerald-700">
-              Bienvenida/o de nuevo: <span className="font-mono">{result.user.email}</span>
+            <p className="mt-1">
+              Bienvenida/o de nuevo:{' '}
+              <span className="font-mono">{result.user.email}</span>
             </p>
           )}
           {result.errors && result.errors.length > 0 && (
@@ -129,6 +137,8 @@ export default function LoginForm() {
           )}
         </div>
       )}
+
+      <ServiceFooter />
     </div>
   );
 }

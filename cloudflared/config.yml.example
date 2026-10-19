@@ -1,0 +1,12 @@
+# Copia este archivo a ./cloudflared/config.yml y ajusta el dominio.
+# Genera las credenciales con:
+#   cloudflared tunnel login
+#   cloudflared tunnel create fakelogin-lab
+# y coloca el credentials.json en esta misma carpeta.
+tunnel: fakelogin-lab
+credentials-file: /etc/cloudflared/credentials.json
+
+ingress:
+  - hostname: lab.tudominio.com        # <-- cambia esto
+    service: http://fakelogin:3000
+  - service: http_status:404

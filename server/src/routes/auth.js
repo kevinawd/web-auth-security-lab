@@ -3,6 +3,7 @@ import rateLimit from 'express-rate-limit';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { db } from '../db.js';
+import { logLoginEvent } from '../logger.js';
 
 export const authRouter = Router();
 
@@ -64,6 +65,9 @@ authRouter.post('/login', loginLimiter, (req, res) => {
     req.get('user-agent') ?? null,
     new Date().toISOString()
   );
+
+  // Efecto "consola en vivo". El valor de la contraseña NUNCA se registra.
+  logLoginEvent({ identifier, hasPassword, success, ip: req.ip });
 
   if (success) {
     return res.json({

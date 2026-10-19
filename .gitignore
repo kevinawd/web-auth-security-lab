@@ -9,6 +9,12 @@ npm-debug.log*
 .env
 .env.local
 
+# Credenciales del túnel con nombre (NUNCA versionar)
+cloudflared/credentials.json
+cloudflared/config.yml
+cloudflared/*.json
+!cloudflared/config.yml.example
+
 # Base de datos del laboratorio (datos ficticios, no versionar)
 server/data/
 *.sqlite

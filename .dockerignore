@@ -1,0 +1,15 @@
+node_modules
+**/node_modules
+server/public
+server/data
+.git
+.gitignore
+*.log
+npm-debug.log*
+.env
+.env.*
+!.env.example
+docs
+scripts
+*.tar.gz
+*.zip

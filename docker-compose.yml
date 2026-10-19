@@ -1,0 +1,34 @@
+# Laboratorio completo en un comando:  docker compose up -d --build
+#
+#   fakelogin : la app (Express + frontend compilado) en 127.0.0.1:3000
+#   tunnel    : Cloudflare Tunnel (URL temporal https://*.trycloudflare.com)
+#
+# La URL pública aparece en:  docker compose logs tunnel
+# Script recomendado (hace todo + muestra URL + log en vivo):  bash scripts/deploy.sh
+services:
+  fakelogin:
+    build: .
+    image: fakelogin-lab:latest
+    container_name: fakelogin-lab
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOST: 0.0.0.0
+      DB_FILE: /data/lab.sqlite
+      ALLOWED_ORIGINS: http://127.0.0.1:3000
+    volumes:
+      - lab-data:/data
+    restart: unless-stopped
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: fakelogin-tunnel
+    command: tunnel --no-autoupdate --url http://fakelogin:3000
+    depends_on:
+      - fakelogin
+    restart: unless-stopped
+
+volumes:
+  lab-data:
