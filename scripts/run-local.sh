@@ -11,9 +11,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 cd "$ROOT_DIR"
 
-# --- 1) Node.js (sin apt): usa el instalado o nvm ---
-if ! command -v node >/dev/null 2>&1; then
-  echo "==> Node no está instalado. Instalando nvm + Node LTS (sin apt)..."
+# --- 1) Node + npm (sin apt): usa los instalados o nvm ---
+# Comprobamos npm (no node): en Kali el paquete 'nodejs' puede venir sin npm.
+if ! command -v npm >/dev/null 2>&1; then
+  echo "==> npm no encontrado. Instalando nvm + Node LTS (incluye npm, sin apt)..."
   export NVM_DIR="$HOME/.nvm"
   if [ ! -s "$NVM_DIR/nvm.sh" ]; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
@@ -21,8 +22,9 @@ if ! command -v node >/dev/null 2>&1; then
   # shellcheck disable=SC1090
   . "$NVM_DIR/nvm.sh"
   nvm install --lts
+  nvm use --lts
 else
-  echo "==> Node detectado: $(node -v)"
+  echo "==> Node $(node -v), npm $(npm -v)"
 fi
 
 # --- 2) Dependencias y build ---
