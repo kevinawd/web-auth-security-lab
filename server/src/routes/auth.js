@@ -85,7 +85,7 @@ authRouter.post('/login', loginLimiter, (req, res) => {
   // Mensaje genérico: no revelamos si el usuario existe (evita enumeración).
   return res.status(401).json({
     ok: false,
-    message: 'Credenciales no válidas (entorno de demostración).'
+    message: 'Verifique su nombre de usuario o contraseña, y vuelva a intentarlo.'
   });
 });
 
