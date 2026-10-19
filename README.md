@@ -72,21 +72,32 @@ curl -X POST http://127.0.0.1:3000/api/login \
      -d '{"identifier":"ana@demo.local","password":"Demo1234"}'
 ```
 
-## Despliegue con Docker — un solo comando (recomendado)
+## Cómo ejecutarlo (dos opciones)
 
+### Opción 1 — Automática (recomendada)
+Usa Docker si está disponible; si no, arranca en local con Node:
 ```bash
-bash scripts/deploy.sh
+bash scripts/start.sh
 ```
 
-Eso instala Docker si falta, construye la imagen, levanta la app **y el túnel**, y
-te muestra una URL pública `https://*.trycloudflare.com` seguida de los intentos de
-login en vivo. Para detener todo:
+### Opción 2 — Manual, elige tú
 
+**Con Docker** (app + túnel en contenedores):
 ```bash
-bash scripts/stop.sh
+bash scripts/deploy.sh        # o: docker compose up -d --build
+bash scripts/stop.sh          # detener
 ```
 
-Equivalente manual:
+**Sin Docker** (Node + cloudflared, sin tocar apt):
+```bash
+bash scripts/run-local.sh     # Ctrl+C para detener
+```
+
+En Kali, `deploy.sh` instala Docker desde el repositorio de Kali (no `get.docker.com`,
+que falla por el codename `kali-rolling`) y `run-local.sh` instala Node LTS con `nvm`
+si falta `npm`. Ver `docs/01-entorno-kali.md`.
+
+## Despliegue con Docker
 
 ```bash
 docker compose up -d --build     # app + túnel

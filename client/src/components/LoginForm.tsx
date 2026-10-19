@@ -3,8 +3,6 @@ import { login } from '../lib/api';
 import type { LoginResponse } from '../types';
 import ServiceFooter from './ServiceFooter';
 
-const DEMO_CREDENTIALS = { identifier: 'ana@demo.local', password: 'Demo1234' };
-
 const INPUT_CLASS =
   'h-9 w-full rounded-[3px] border border-slate-300 bg-white px-2 text-sm text-slate-900 ' +
   'focus:border-white focus:outline-none focus:ring-2 focus:ring-white/60';
@@ -33,11 +31,6 @@ export default function LoginForm() {
     } finally {
       setLoading(false);
     }
-  }
-
-  function fillDemoCredentials() {
-    setIdentifier(DEMO_CREDENTIALS.identifier);
-    setPassword(DEMO_CREDENTIALS.password);
   }
 
   return (
@@ -99,14 +92,6 @@ export default function LoginForm() {
           <a href="#" className="underline underline-offset-2 hover:text-white/80">
             ¿Olvidó la contraseña?
           </a>
-          <br />
-          {/* <button
-            type="button"
-            onClick={fillDemoCredentials}
-            className="underline underline-offset-2 hover:text-white/80"
-          >
-            Usar credenciales de demostración
-          </button> */}
         </div>
       </form>
 
