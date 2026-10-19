@@ -1,0 +1,20 @@
+node_modules/
+dist/
+build/
+server/public/
+*.log
+npm-debug.log*
+
+# Entorno y secretos
+.env
+.env.local
+
+# Base de datos del laboratorio (datos ficticios, no versionar)
+server/data/
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+
+# Sistema
+.DS_Store
+Thumbs.db
