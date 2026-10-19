@@ -33,10 +33,15 @@ export function createApp() {
   app.use(
     cors({
       origin(origin, callback) {
-        if (!origin || config.allowedOrigins.includes(origin)) {
-          return callback(null, true);
-        }
-        return callback(new Error('Origen no permitido por CORS'));
+        // Sin Origin (curl, navegación directa, server-to-server): permitir.
+        if (!origin) return callback(null, true);
+        // Origen explícitamente permitido (p. ej. el frontend de desarrollo).
+        if (config.allowedOrigins.includes(origin)) return callback(null, true);
+        // Cualquier otro origen: NO lanzar error (eso provocaba un 500 que rompía
+        // también las peticiones same-origin del túnel). Simplemente no añadimos
+        // cabeceras CORS: las peticiones same-origin funcionan igual y las
+        // cross-origin no autorizadas las bloquea el navegador.
+        return callback(null, false);
       },
       credentials: false
     })

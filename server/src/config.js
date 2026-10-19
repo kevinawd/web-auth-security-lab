@@ -21,7 +21,9 @@ export const config = {
   dbFile: process.env.DB_FILE ?? 'data/lab.sqlite',
   allowedOrigins: toList(process.env.ALLOWED_ORIGINS, [
     'http://localhost:5173',
-    'http://127.0.0.1:5173'
+    'http://127.0.0.1:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
   ]),
   bcryptRounds: toInt(process.env.BCRYPT_ROUNDS, 10)
 };
